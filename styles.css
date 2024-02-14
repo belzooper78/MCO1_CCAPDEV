@@ -13,14 +13,47 @@
     border-left: solid 1px grey;
 }
 
+.commentReply{
+    font-size: smaller;
+}
 
+.commentReply:hover{
+    text-decoration: underline;
+}
 
+.threadHeader{
+    display: flex;
+    justify-content: space-between;
+}
 
+.media-body{
+    padding: 1rem;
+}
 
+.tagDescription{
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    margin-right: 2rem;
 
+}
 
+.tagContainer{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    align-self:flex-start;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: #fff;
+}
 
-
+.innerBody{
+    display: flex;
+    flex-direction: row;
+    overflow:auto;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
 
 
@@ -103,7 +136,7 @@
 }
 
 .pagination{
-    background: ghostwhite;
+    background: rgb(255, 255, 255);
     padding: 1%;
     margin: auto;
 }
@@ -123,13 +156,22 @@
     margin-left: auto;
 }
 
-.badge{
+.tagBadge{
+    display: flex;
+    align-items:flex-start;
+    padding: 0.5rem;
+    margin: 0.2rem;
+
+    background-color: #76a2e3;
+}
+
+.badgeSelectable{
     padding: 0.5rem;
     margin: 0.2rem;
     background-color: #76a2e3;
 }
 
-.badge:hover, .badge.active{
+.badgeSelectable:hover, .badgeSelectable.active{
     background-color: #4289f5;
 }
 
