@@ -23,25 +23,38 @@ $( ".upvote" ).click(function() {
         $( this ).removeClass( "active" );
     }
   });
+  var urlParams = new URLSearchParams(window.location.search);
+  var key = urlParams.get('user');
+  $(document).ready(function() {
+    $('.user-profile-name').text(key);
+});
 
+document.addEventListener("DOMContentLoaded", function() {
+  var underline = document.querySelector(".underline-activities");
+  var listItems = document.querySelectorAll(".user-activitues li");
 
-  $(".editBtn").click(function() {
-    $("#forum-content").modal('toggle');
-    $("#edit-forum").modal('show');
-  })
+  updateUnderlinePosition();
 
-  $(".cancelChanges").click(function() {
-    $("#edit-forum").modal('toggle');
-    $("#forum-content").modal('show');
-  })
+  listItems.forEach(function(item) {
+      item.addEventListener("click", function() {
+        
+          listItems.forEach(function(li) {
+              li.classList.remove("active");
+          });
 
-  $(".delBtn").click(function() {
-    $("#forum-content").modal('toggle');
-    $("#delWarning").modal('show');
-  })
+          item.classList.add("active");
 
-  $(".cancelDelete").click(function() {
-    $("#delWarning").modal('toggle');
-    $("#forum-content").modal('show');
-  })
+          updateUnderlinePosition();
+      });
+  });
 
+  function updateUnderlinePosition() {
+      var activeItem = document.querySelector(".user-activitues li.active");
+      if (activeItem) {
+          var leftOffset = activeItem.offsetLeft;
+          var width = activeItem.offsetWidth;
+          underline.style.width = width + "px";
+          underline.style.transform = "translateX(" + leftOffset + "px)";
+      }
+  }
+});
