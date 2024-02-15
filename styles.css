@@ -1,7 +1,19 @@
+.tagSort{
+    margin: auto;
+    width: fit-content;
+    padding: 0.5rem;
+}
+
+.tagSearch{
+    margin-top: rem;
+    justify-content: center;
+}
+
 .commentBody{
     color:#4e4f4f;
     border-left: solid 1px grey;
     padding-left: 1rem;
+    box-shadow: 0px 0px 7px 0px #d8d8d8;
 }
 
 .commentChain{
@@ -19,6 +31,24 @@
 
 .commentReply:hover{
     text-decoration: underline;
+}
+
+.comment-actions{
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    border-left: 1px solid grey;
+    padding-left: 1rem;
+    width: fit-content;
+}
+
+.comment-info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-time{
+    color: #59595a;
 }
 
 .threadHeader{
@@ -135,7 +165,7 @@
     margin-right: auto;
 }
 
-.pagination{
+.Navpagination{
     background: rgb(255, 255, 255);
     padding: 1%;
     margin: auto;
@@ -187,6 +217,7 @@
 .post-actions{
   display: flex;
   justify-content: flex-start;
+  overflow:hidden;
   gap:1rem;
   padding-left: 1rem;
   height: 40px;
