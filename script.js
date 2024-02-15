@@ -23,12 +23,34 @@ $( ".upvote" ).click(function() {
         $( this ).removeClass( "active" );
     }
   });
-  var urlParams = new URLSearchParams(window.location.search);
+
+
+  $(".editBtn").click(function() {
+    $("#forum-content").modal('toggle');
+    $("#edit-forum").modal('show');
+  })
+
+  $(".cancelChanges").click(function() {
+    $("#edit-forum").modal('toggle');
+    $("#forum-content").modal('show');
+  })
+
+  $(".delBtn").click(function() {
+    $("#forum-content").modal('toggle');
+    $("#delWarning").modal('show');
+  })
+
+  $(".cancelDelete").click(function() {
+    $("#delWarning").modal('toggle');
+    $("#forum-content").modal('show');
+  })
+/*from ccinfom old project, saving user in url*/ 
+  var urlParams = new URLSearchParams(window.location.search); /* URLSearchParams asked from chatgpt*/
   var key = urlParams.get('user');
   $(document).ready(function() {
     $('.user-profile-name').text(key);
 });
-
+/*chat gpt for css animation for profile*/
 document.addEventListener("DOMContentLoaded", function() {
   var underline = document.querySelector(".underline-activities");
   var listItems = document.querySelectorAll(".user-activitues li");
@@ -57,4 +79,9 @@ document.addEventListener("DOMContentLoaded", function() {
           underline.style.transform = "translateX(" + leftOffset + "px)";
       }
   }
+});
+
+document.getElementsByClassName('edit-profile').addEventListener('click', function () {
+  
+  $('#editprofileModal').modal('show');
 });
