@@ -37,8 +37,6 @@ body {
     right: 0;
     bottom: 0;
     position: absolute;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
 }
 
 .login-snip .sign-in,
@@ -47,11 +45,11 @@ body {
     display: none;
 }
 
-/* .login-snip .tab,
+.login-snip .tab,
 .login-space .group .label,
 .login-space .group .button {
-     text-transform: uppercase; 
-} */
+    /* text-transform: uppercase; */
+}
 
 .login-snip .tab {
     font-size: 22px;
@@ -149,9 +147,9 @@ body {
     transform: scale(0) rotate(0);
 }
 
-/* .login-space .group .check:checked+label {
-     color: #fff; 
-} */
+.login-space .group .check:checked+label {
+    /* color: #fff; */
+}
 
 .login-space .group .check:checked+label .icon {
     background: #1161ee;
