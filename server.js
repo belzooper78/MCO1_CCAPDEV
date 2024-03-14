@@ -38,13 +38,23 @@ async function main(){
         res.redirect('/home');
     });
 
+    //replacing session save for now
+    let username;
+
     app.get('/home', async (req, res) => {
         const user_postsArray = await user_posts.find({}).lean().exec();
+       // let currentUser = req.session && req.session.username ? req.session.username : null;
+        //let currentUser = req.session.username ? JSON.parse(req.session.username) : null;
+        let currentUser = username;
         res.render("index", {
             layout: false,
             title: "UserPosts",
-            userPosts: user_postsArray
+            userPosts: user_postsArray,
+            currentUser: currentUser
+            
         });
+      
+     
     });
     //LOGIN ROUTES
     app.get('/login', (req, res) => {
@@ -93,20 +103,31 @@ async function main(){
             const check = await collection.findOne({name: req.body.username});
             if (!check) {
                 res.send("User does not exist");
+                returnl
             }
     
             //compare hash pass with plain text
-            const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
+            let isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
             if(isPasswordMatch){
+               
+                username = {
+                    id:check._id,
+                    name: check.name
+                };
+               // req.session.username = JSON.stringify(username); //store data to session dont know how yet
                 res.redirect("/home"); //instead of render index so that we can see posts
+                
             }
             else {
-                req.send("Wrong Password");
+                return res.send("Wrong Password");
             }
+            
         }
-        catch {
-            res.send("Wrong Credentials");
+        catch(err) {
+           console.log(err)
+           
         }
+
     
     });
 
@@ -126,6 +147,6 @@ async function main(){
         console.error(err);
         process.exit();
     }
-
+   
 }
 main();
