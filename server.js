@@ -98,7 +98,7 @@ async function main(){
             //compare hash pass with plain text
             const isPasswordMatch = await bcrypt.compare(req.body.password, check.password);
             if(isPasswordMatch){
-                res.render("index");
+                res.redirect("/home"); //instead of render index so that we can see posts
             }
             else {
                 req.send("Wrong Password");
