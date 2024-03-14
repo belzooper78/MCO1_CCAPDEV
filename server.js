@@ -8,14 +8,18 @@ import { fileURLToPath } from 'url';
 import { connectToMongo} from "./src/db/conn.js";
 import exphbs from 'express-handlebars';
 import user_posts from './src/db/user_post.js';
+import Users from './src/login/loginConfig.js';
+import bodyParser from "body-parser";
+import collection from "./src/login/loginConfig.js";
+import bcrypt from 'bcrypt';
 
 async function main(){
     const __dirname = dirname(fileURLToPath(import.meta.url));
     const app = express();
-
+   
     app.use("/static", express.static(path.join(__dirname + "/public")));  
 
-
+    app.use(bodyParser.urlencoded({ extended: false }));
     //https://stackoverflow.com/questions/10138518/handlebars-substring/25993386
 
     app.engine("hbs", exphbs.engine({extname:'hbs',

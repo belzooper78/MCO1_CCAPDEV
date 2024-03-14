@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
+import { connectToMongo } from "../db/conn.js";
+//const connect = mongoose.connect("mongodb://localhost:27017/BNN-accounts");
 
-const connect = mongoose.connect("mongodb://localhost:27017/BNN-accounts");
-
-connect.then(() => {
+connectToMongo().then(() => {
     console.log("Database connected successfully");
 }).catch(() => {
     console.log("Database connection failed");
@@ -23,6 +23,6 @@ const loginSchema = new mongoose.Schema({
     }
 });
 
-const collection = mongoose.model("users", loginSchema);
+const collection = mongoose.model("Users", loginSchema);
 
 export default collection;
