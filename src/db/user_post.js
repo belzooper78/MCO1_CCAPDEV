@@ -11,7 +11,7 @@ const user_postSchema = new Schema({
     },
     createdBy: {
         type: Schema.Types.ObjectId,
-        ref: 'users', 
+        ref: 'Users', 
         required: true
     }
    
