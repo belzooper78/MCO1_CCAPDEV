@@ -103,7 +103,7 @@ async function main(){
             const check = await collection.findOne({name: req.body.username});
             if (!check) {
                 res.send("User does not exist");
-                returnl
+                return;
             }
     
             //compare hash pass with plain text
