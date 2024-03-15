@@ -33,8 +33,8 @@ userCommentRouter.get('/postComment/:ID', async (req, res) => {
     console.log(user_post);
     
     res.render("postComment", {
-                title: "UserPost",
-                userPosts: user_post
+                title: user_post.title,
+                content: user_post.content
             });
 });
 
