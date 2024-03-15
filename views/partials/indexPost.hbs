@@ -4,8 +4,8 @@
         <div class="post-item forum-item">
             <div class="threadHeader">
                 <div class="thread-info">
-                <a href="profile.html?user=Dijkstra"><img
-                    src="Screenshot 2024-01-16 094733.png"
+                <a href=""><img
+                    src=""
                     class="mr-3 rounded-circle" width="50" alt="User" />Dijkstra</a>
                 </div>
                 <div class="text-muted infoIcons">
@@ -21,8 +21,7 @@
                     </svg> <span class="text-secondary font-weight-bold">13 minutes ago</span></div>
                 </div>    
             <div class="media-body">
-                <h6><a href="#"  data-toggle="modal"
-                    data-target="#forum-content1"
+                <h6><a  href='/postComment/{{this._id}}'
                         class="text-body">{{this.title}}</a></h6>
                 <p class="text-secondary">
                     {{trim this.content 90}}
@@ -41,7 +40,8 @@
                 <i class="fa fa-thumbs-down solid"></i>
                 <span>3</span>  
             </div>
-            <a href="Comments.html">
+            <!--onclick="sendID('{{this._id}}')"-->
+            <a  href='/postComment/{{this._id}}'>
             <button class="commentBtn btn btn-primary-outline">Comment/View Comments... <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-text-fill" viewBox="0 0 16 16">
                 <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.5a1 1 0 0 0-.8.4l-1.9 2.533a1 1 0 0 1-1.6 0L5.3 12.4a1 1 0 0 0-.8-.4H2a2 2 0 0 1-2-2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
                 </svg></button></a>
