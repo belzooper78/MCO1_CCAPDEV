@@ -12,17 +12,17 @@ userPostRouter.get(("/userPosts" || "/home"), async (req, res) => {
         userPosts: user_postsArray
     });
 });
-console.log("userpost");
+// console.log("userpost");
 
 userPostRouter.post("/userPosts", async (req, res) => {
     console.log("POST request received for /home");
-    console.log(req.body)
+    // console.log(req.body)
     try {
         const newUser_Post = new user_posts(req.body);
         await newUser_Post.validate();
         await newUser_Post.save();
         
-        console.log(newUser_Post);
+        // console.log(newUser_Post);
         res.sendStatus(200);
 
     } catch (err) {

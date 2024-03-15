@@ -1,40 +1,52 @@
 import { Router } from 'express';
+import user_comments from '../db/user_comments.js';
 import user_posts from '../db/user_post.js';
 
 const userCommentRouter = Router();
 
-// userCommentRouter.get(("/postComments"), async (req, res) => {
+
+// userCommentRouter.get(("/comments"), async (req, res) => {
 //     console.log("GET");
-//     const user_post = await user_posts.findById(req._id).lean().exec();
+//     const user_commentsArray = await user_comments.find({post: req.body}).lean().exec();
 //     res.render("postComment", {
-//         title: "UserPost",
-//         userPosts: user_post
+//         title: "PostComments",
+//         postComments: user_commentsArray
 //     });
 // });
 
-// userCommentRouter.post("/postComments", async (req, res) => {
-//     console.log("POST request received for /postComment");
-//     try{
-//     const user_post = await user_posts.findById(req.body._id).lean().exec();
-//     // console.log(user_post);
-//     res.send({
-//         body: JSON.stringify({UserPost: user_post}), 
-//         headers: {
-//         'Content-Type': 'application/json'
-//     }});
-// } catch(err){
-//         console.error(err);
-//     }
-// });
+userCommentRouter.post("/comments", async (req, res) => {
+    console.log("POST request received for /postComment");
+    // console.log(req.body)
+    try {
+        const newUser_Comment = new user_comments(req.body);
+        await newUser_Comment.validate();
+        await newUser_Comment.save();
+        
+        // console.log(newUser_Comment);
+        res.sendStatus(200);
+
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+});
 
 
 userCommentRouter.get('/postComment/:ID', async (req, res) => {
     const user_post = await user_posts.findById(req.params.ID).lean().exec();
-    console.log(user_post);
+    const user_commentsArray = await user_comments.find({post: req.params.ID}).lean().exec();
+    // console.log(user_commentsArray);
     
     res.render("postComment", {
                 title: user_post.title,
-                content: user_post.content
+                content: user_post.content,
+                _id: req.params.ID, 
+                upvote: user_post.upvote,
+                downvote: user_post.downvote,
+                isEdited: user_post.isEdited,
+                isUpvoted: user_post.isUpvoted,
+                isDownvoted: user_post.isDownvoted,
+                PostComments: user_commentsArray
             });
 });
 

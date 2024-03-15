@@ -1,41 +1,41 @@
-const postBtn = document.getElementById("confirm_post");
-const post_form = document.forms.createPost_form;
+const commentBtn = document.getElementById("confirm_commentPost");
+const comment_form = document.forms.createCommentPostForm;
 
-const post_upvoteBtn = document.getElementById("upvoteBtnPost");
-const post_downvoteBtn = document.getElementById("downvoteBtnPost");
+const cmnt_upvoteBtn = document.getElementById("upvoteBtnCmnt");
+const cmnt_downvoteBtn = document.getElementById("downvoteBtnCmnt");
 
-post_upvoteBtn?.addEventListener("click", async (e) => {
+cmnt_upvoteBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log('upvoted');
     let Obj1 = Object.assign({});
-    console.log(document.getElementById("upvote_bool").value);
-    if(document.getElementById("upvote_bool").value === "false"){
+    console.log(document.getElementById("cupvote_bool").value);
+    if(document.getElementById("cupvote_bool").value === "false"){
         Object.assign(Obj1, {
-        post: document.getElementById("post_value").value,
-        upvote: document.getElementById("upvote_value").value + 1,
+        comment: document.getElementById("comment_value").value,
+        upvote: document.getElementById("cupvote_value").value + 1,
         isUpvoted: true
        });
        console.log("1");
 
     }
-    else if(document.getElementById("upvote_bool").value === "true"){
+    else if(document.getElementById("cupvote_bool").value === "true"){
         Object.assign(Obj1, { 
-            post: document.getElementById("post_value").value,
-            upvote: document.getElementById("upvote_value").value - 1,
+            comment: document.getElementById("comment_value").value,
+            upvote: document.getElementById("cupvote_value").value - 1,
             isUpvoted: false
         });
         console.log("2");
     }
-    if(document.getElementById("downvote_bool").value === "true"){
+    if(document.getElementById("cdownvote_bool").value === "true"){
         Object.assign(Obj1, { 
-            downvote: document.getElementById("downvote_value").value - 1,
+            downvote: document.getElementById("cdownvote_value").value - 1,
             isDownvoted: false
         });
         console.log("3");
     }
     
     const jString = JSON.stringify(Obj1);
-    console.log(jString)
+    console.log("logggg",jString);
     try {
         const response = await fetch("/update", {
             method: 'POST',
@@ -56,29 +56,29 @@ post_upvoteBtn?.addEventListener("click", async (e) => {
     
 });
 
-post_downvoteBtn?.addEventListener("click", async (e) => {
+cmnt_downvoteBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log('downvoted');
     let Obj1 = Object.assign({});
-    if(document.getElementById("upvote_bool").value === "true"){
+    if(document.getElementById("cupvote_bool").value === "true"){
         Object.assign(Obj1, {  
-            upvote: document.getElementById("upvote_value").value - 1,
+            upvote: document.getElementById("cupvote_value").value - 1,
             isUpvoted: false
         });
     
     }
-    if(document.getElementById("downvote_bool").value === "false"){
+    if(document.getElementById("cdownvote_bool").value === "false"){
         Object.assign(Obj1, { 
-            post: document.getElementById("post_value").value,
-            downvote: document.getElementById("downvote_value").value + 1,
+            comment: document.getElementById("comment_value").value,
+            downvote: document.getElementById("cdownvote_value").value + 1,
             isDownvoted: true
         });
         
     }
-    else if(document.getElementById("downvote_bool").value === "true"){
+    else if(document.getElementById("cdownvote_bool").value === "true"){
         Object.assign(Obj1, {  
-            post: document.getElementById("post_value").value,
-            downvote: document.getElementById("downvote_value").value - 1,
+            comment: document.getElementById("comment_value").value,
+            downvote: document.getElementById("cdownvote_value").value - 1,
             isDownvoted: false
         });
        
@@ -104,14 +104,15 @@ post_downvoteBtn?.addEventListener("click", async (e) => {
     
 });
 
-postBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const form_data = new FormData(post_form);
 
-    if(form_data.get("title") !== "" && form_data.get("content") !== ""){
+commentBtn?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const form_data = new FormData(comment_form);
+    console.log(document.getElementById("post_value").value);
+    if(form_data.get("content") !== ""){
     console.log('submit');
     const Obj = { 
-        title: form_data.get("title"),
+        post: document.getElementById("post_value").value,
         content: form_data.get("content"),
         upvote: 0,
         downvote: 0,
@@ -124,7 +125,7 @@ postBtn?.addEventListener("click", async (e) => {
     console.log(jString);
 
     try {
-        const response = await fetch("/userPosts", {
+        const response = await fetch("/comments", {
             method: 'POST',
             body: jString,
             headers: {

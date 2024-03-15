@@ -1,7 +1,7 @@
 import { SchemaTypes, Schema, model } from 'mongoose';
-const user_postSchema = new Schema({
-    title: {
-        type: SchemaTypes.String,
+const user_commentSchema = new Schema({
+    post: {
+        type: SchemaTypes.ObjectId,
         required: true
     },
     content: {
@@ -28,7 +28,6 @@ const user_postSchema = new Schema({
         type: SchemaTypes.Boolean,
         required: true
     }
-    //dateTime, views, number of comments to be added in Phase 3
 });
-const user_posts = model('user_post', user_postSchema);
+const user_posts = model('user_comment', user_commentSchema);
 export default user_posts;
