@@ -13,7 +13,7 @@ async function main(){
     const __dirname = dirname(fileURLToPath(import.meta.url));
     const app = express();
 
-    app.use("/static", express.static(path.join(__dirname + "/public")));  
+    app.use("/static", express.static(path.resolve(__dirname, './public')));  
 
 
     //https://stackoverflow.com/questions/10138518/handlebars-substring/25993386
