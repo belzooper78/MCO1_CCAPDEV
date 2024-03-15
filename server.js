@@ -66,7 +66,11 @@ async function main(){
     app.get("/signup", (req, res) => {
         res.render("signup");
     })
-    
+    app.get("/logout", (req, res) => {
+         username = null; //clears session for now ||not sure how to session handle properly yet
+
+         res.redirect('/home');
+    })
     
     // register user
     app.post("/signup", async (req, res) => {
