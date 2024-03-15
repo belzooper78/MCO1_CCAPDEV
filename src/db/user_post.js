@@ -10,8 +10,7 @@ const user_postSchema = new Schema({
         required: true
     },
     createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'Users', 
+        type: SchemaTypes.String,
         required: true
     }
    

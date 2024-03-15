@@ -88,7 +88,20 @@ async function main(){
 
          res.redirect('/home');
     })
-    
+    app.get('/userprofile', async (req, res) => {
+        let currentUser = getUsername();
+        let userName = req.query.name;
+        console.log('Username:', userName);
+        const user_postsArray = await user_posts.find({}).lean().exec();
+        res.render('userprofile', { 
+            layout: false,
+            title: "UserPosts",
+            userPosts: user_postsArray,
+            currentUser: currentUser, 
+            userName: userName 
+        });
+    });
+
     // register user
     app.post("/signup", async (req, res) => {
         const data = {
@@ -133,7 +146,8 @@ async function main(){
                
                 username = {
                     id:check._id,
-                    name: check.name
+                    name: check.name,
+                    image: check.image
                 };
                 setUsername(username);
                // req.session.username = JSON.stringify(username); //store data to session dont know how yet

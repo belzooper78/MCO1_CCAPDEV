@@ -3,6 +3,7 @@ import user_posts from '../db/user_post.js';
 import { getUsername } from '../../server.js';
 import collection from '../login/loginConfig.js'
 import mongoose from 'mongoose'
+import { ObjectId } from 'mongodb';
 const userPostRouter = Router();
 
 userPostRouter.get(("/userPosts" || "/home"), async (req, res) => {
@@ -24,14 +25,14 @@ userPostRouter.post("/userPosts", async (req, res) => {
         const user_name = getUsername().name;
         
         //const objectid = new mongoose.Types.ObjectId(userid);
-        //const userdetails = await user_posts.findById( userid).populate('createdBy').exec();
+       // const userdetails = await user_posts.findOne({createdBy : user_name});
        // console.log("details: "+userdetails);
        // console.log("userid: "+userid);
-       // console.log("user_name: "+user_name);
+        console.log("user_name: "+user_name);
         const newUser_Post = new user_posts({
             title: req.body.title,
             content: req.body.content,
-            createdBy: userid
+            createdBy: user_name
         });
         await newUser_Post.validate();
         await newUser_Post.save();
