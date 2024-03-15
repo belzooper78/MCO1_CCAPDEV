@@ -20,6 +20,10 @@ router.get("/login", (req, res) => {
     res.render("login");
 });
 
+router.get("/Tags",(req, res) => {
+    res.render("Tags");
+});
+
 //both posts and comments uses this
 router.post("/update", async (req, res) => {
     console.log("POST request received for /update");
