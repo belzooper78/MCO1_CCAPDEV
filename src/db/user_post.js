@@ -1,4 +1,5 @@
 import { SchemaTypes, Schema, model } from 'mongoose';
+
 const user_postSchema = new Schema({
     title: {
         type: SchemaTypes.String,
@@ -6,6 +7,11 @@ const user_postSchema = new Schema({
     },
     content: {
         type: SchemaTypes.String,
+        required: true
+    },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'users', 
         required: true
     }
    

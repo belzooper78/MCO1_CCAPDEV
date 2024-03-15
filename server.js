@@ -8,10 +8,20 @@ import { fileURLToPath } from 'url';
 import { connectToMongo} from "./src/db/conn.js";
 import exphbs from 'express-handlebars';
 import user_posts from './src/db/user_post.js';
-import Users from './src/login/loginConfig.js';
 import bodyParser from "body-parser";
 import collection from "./src/login/loginConfig.js";
 import bcrypt from 'bcrypt';
+import Handlebars from 'handlebars';
+
+let username = null;
+function setUsername(user) {
+    username = user; 
+}
+function getUsername() {
+    return username; 
+}
+
+export{getUsername};
 
 async function main(){
     const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -21,6 +31,14 @@ async function main(){
 
     app.use(bodyParser.urlencoded({ extended: false }));
     //https://stackoverflow.com/questions/10138518/handlebars-substring/25993386
+
+
+    Handlebars.registerHelper('limit', function (arr, limit) {
+        if (!Array.isArray(arr)) { return []; }
+        return arr.slice(0, limit);
+    });
+    //https://stackoverflow.com/questions/10377700/limit-results-of-each-in-handlebars-js
+
 
     app.engine("hbs", exphbs.engine({extname:'hbs',
         helpers: {
@@ -39,13 +57,12 @@ async function main(){
     });
 
     //replacing session save for now
-    let username;
-
+   
     app.get('/home', async (req, res) => {
         const user_postsArray = await user_posts.find({}).lean().exec();
        // let currentUser = req.session && req.session.username ? req.session.username : null;
         //let currentUser = req.session.username ? JSON.parse(req.session.username) : null;
-        let currentUser = username;
+        let currentUser = getUsername();
         res.render("index", {
             layout: false,
             title: "UserPosts",
@@ -67,7 +84,7 @@ async function main(){
         res.render("signup");
     })
     app.get("/logout", (req, res) => {
-         username = null; //clears session for now ||not sure how to session handle properly yet
+         setUsername(null); //clears session for now ||not sure how to session handle properly yet
 
          res.redirect('/home');
     })
@@ -118,6 +135,7 @@ async function main(){
                     id:check._id,
                     name: check.name
                 };
+                setUsername(username);
                // req.session.username = JSON.stringify(username); //store data to session dont know how yet
                 res.redirect("/home"); //instead of render index so that we can see posts
                 
@@ -151,6 +169,7 @@ async function main(){
         console.error(err);
         process.exit();
     }
-   
+    
 }
+
 main();

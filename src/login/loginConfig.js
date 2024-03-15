@@ -20,6 +20,10 @@ const loginSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true
+    },
+    image: {//buffer for image data
+        data: Buffer, 
+        contentType: String //png/jpg
     }
 });
 

@@ -36,9 +36,15 @@
 
                     <div class="inner-main-body p-2 p-sm-3 collapse forum-content show">
                         {{#if userPosts}}
-                            {{#each userPosts}}
-                            {{> indexPost this}}
-                            {{/each}}
+                            {{#if currentUser}}
+                                {{#each userPosts}}
+                                    {{> indexPost this}}
+                                {{/each}}
+                            {{else}}
+                                {{#each (limit userPosts 20)}} 
+                                    {{> indexPost this}}
+                                {{/each}}
+                            {{/if}}
                         {{else}}
                         <p>Nothing to show...</p>
                         {{/if}}
@@ -52,12 +58,21 @@
             </div>
 
             <div class="post-button">
+                {{#if currentUser}}
+                    <button class="btn btn-primary-outline has-icon btn-block" type="button" data-toggle="modal"
+                        data-target="#addPost">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                        </svg>
+                    </button>
+                {{else}}
                 <button class="btn btn-primary-outline has-icon btn-block" type="button" data-toggle="modal"
-                      data-target="#addPost">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
-                       <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
-                     </svg>
-               </button>
+                        data-target="#loginModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                        </svg>
+                </button>
+                {{/if}}
             </div>
 
             
@@ -85,7 +100,24 @@
                     </div>
                 </div>
             </div>
-
+            <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Login Required</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Please log in to access this feature.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div class="modal fade" id="addPost" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">

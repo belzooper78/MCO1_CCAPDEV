@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import user_posts from '../db/user_post.js';
-
+import { getUsername } from '../../server.js';
 const userPostRouter = Router();
-
 
 userPostRouter.get(("/userPosts" || "/home"), async (req, res) => {
     console.log("GET");
@@ -18,7 +17,13 @@ userPostRouter.post("/userPosts", async (req, res) => {
     console.log("POST request received for /home");
     console.log(req.body)
     try {
-        const newUser_Post = new user_posts(req.body);
+        
+        const userid =getUsername().id;
+        const newUser_Post = new user_posts({
+            title: req.body.title,
+            content: req.body.content,
+            createdBy: userid
+        });
         await newUser_Post.validate();
         await newUser_Post.save();
         
