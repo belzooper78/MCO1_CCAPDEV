@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import { connectToMongo} from "./src/db/conn.js";
 import exphbs from 'express-handlebars';
 import user_posts from './src/db/user_post.js';
+import user_Account from './src/db/user.js';
 
 async function main(){
     const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -46,13 +47,41 @@ async function main(){
     app.get('/home', async (req, res) => {
         console.log(req.session.user);
         const isLoggedIn = req.session.user !== undefined;
-        const user_postsArray = await user_posts.find({}).lean().exec();
-        res.render("index", {
-            layout: false,
-            title: "UserPosts",
-            userPosts: user_postsArray,
-            isLoggedIn: isLoggedIn
-        });
+
+        const userId = req.session.user;
+        console.log("user Id: "+JSON.stringify(userId));
+        const stringed = JSON.stringify(userId);
+        const userIdobject = userId !== undefined ? JSON.parse(stringed): console.log("userId is undefined");
+        const newUserId = userId !== undefined ? userIdobject.id: console.log("^^^");
+
+        const currentUserOG = await user_Account.findById(newUserId);
+        //console.log("username: "+currentUser.username);
+
+        
+        try{
+            let currentUser = {};
+            if(currentUserOG) {
+                currentUser={
+                    username: currentUserOG.username,
+                    imageP: currentUserOG.imageP,
+                    imageB: currentUserOG.imageB
+                }
+            }
+            const user_postsArray = await user_posts.find({}).lean().exec();
+            //console.log("CHECKING CURRENT USER: "+ JSON.stringify(currentUser));
+
+            res.render("index", {
+                layout: false,
+                title: "UserPosts",
+                userPosts: user_postsArray,
+                isLoggedIn: isLoggedIn,
+                currentUser : currentUser
+            });
+        }catch{
+
+        }
+
+       
     });
 
     app.use(express.json());
