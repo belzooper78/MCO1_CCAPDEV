@@ -27,6 +27,10 @@ const user_postSchema = new Schema({
     isDownvoted:{
         type: SchemaTypes.Boolean,
         required: true
+    },
+    createdBy: {
+        type: SchemaTypes.String,
+        required: true
     }
     //dateTime, views, number of comments to be added in Phase 3
 });
