@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import userPostRouter from './userPostRouter.js';
 import userCommentRouter from './commentRouter.js';
+import userRouter from './userRouter.js';
 import user_comments from '../db/user_comments.js';
 import user_posts from '../db/user_post.js';
 import mongoose from 'mongoose';
@@ -18,6 +19,10 @@ router.get("/homepage", (req, res) => {
 
 router.get("/login", (req, res) => {
     res.render("login");
+});
+
+router.get("/signup", (req, res) => {
+    res.render("signup");
 });
 
 router.get("/Tags",(req, res) => {
@@ -83,5 +88,6 @@ router.post("/update", async (req, res) => {
 
 router.use(userPostRouter);
 router.use(userCommentRouter);
+router.use(userRouter)
 
 export default router;

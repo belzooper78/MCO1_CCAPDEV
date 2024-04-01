@@ -135,7 +135,7 @@ commentBtn?.addEventListener("click", async (e) => {
         
         console.log(response);
         if (response.status === 200) {
-            location.reload();
+            location.href("/");
         } else {
             console.log("Status code received: " + response.status);
         }

@@ -3,6 +3,8 @@ import "dotenv/config";
 import express from 'express';
 import path from 'path';
 import router from "./src/routes/indexRouter.js";
+import bcrypt from 'bcrypt';
+import session from "express-session";
 import { dirname } from "path";
 import { fileURLToPath } from 'url';
 import { connectToMongo} from "./src/db/conn.js";
@@ -12,6 +14,13 @@ import user_posts from './src/db/user_post.js';
 async function main(){
     const __dirname = dirname(fileURLToPath(import.meta.url));
     const app = express();
+
+    app.use(session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
+    }));
 
     app.use("/static", express.static(path.resolve(__dirname, './public')));  
 
@@ -35,17 +44,22 @@ async function main(){
     });
 
     app.get('/home', async (req, res) => {
+        console.log(req.session.user);
+        const isLoggedIn = req.session.user !== undefined;
         const user_postsArray = await user_posts.find({}).lean().exec();
         res.render("index", {
             layout: false,
             title: "UserPosts",
-            userPosts: user_postsArray
+            userPosts: user_postsArray,
+            isLoggedIn: isLoggedIn
         });
     });
 
     app.use(express.json());
 
     app.use(router);
+
+    
     
     try{
         await connectToMongo();

@@ -31,4 +31,5 @@ userPostRouter.post("/userPosts", async (req, res) => {
     }
 });
 
+
 export default userPostRouter;
