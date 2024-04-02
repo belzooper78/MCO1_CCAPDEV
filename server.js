@@ -69,16 +69,14 @@ async function main(){
                 console.log(currentUser.username);
             }
         
-            const user_postsArray = await user_posts.find({}).lean().exec();
-            //console.log("CHECKING CURRENT USER: "+ JSON.stringify(currentUser));
-            
+            const user_postsArray = await user_posts.find({}).populate('createdBy').lean().exec();
+          
             res.render("index", {
                 layout: false,
                 title: "UserPosts",
                 userPosts: user_postsArray,
                 isLoggedIn: isLoggedIn,
-                //currentUser : currentUser,
-                //currentDATE: currentDATE
+               
             });
         }catch{
 
