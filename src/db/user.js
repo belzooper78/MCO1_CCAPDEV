@@ -12,24 +12,13 @@ const user_Schema = new Schema({
         required: true
     },
     imageP: {//profile picture imageP 
-        data: { //default image I drew
-            type: Buffer, 
-            default: fs.readFileSync('public/images/pfp.png') 
-        },
-        contentType: {
-            type: String,
-            default: 'image/png' 
-        }
+        type: String,
+        default: '/static/images/pfp.png'
+        
     },
     imageB: {//BACKGROUND IMAGE
-        data: { //default image I drew
-            type: Buffer, 
-            default: fs.readFileSync('public/images/pfp.png') 
-        },
-        contentType: {
-            type: String,
-            default: 'image/png' 
-        }
+        type: String,
+        default: '/static/images/pfp.png'
     }
 
 });
