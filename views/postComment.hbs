@@ -40,7 +40,7 @@
                                     <div class="thread-info">
                                     <a href="" data-toggle="modal" data-target="#forum-content"><img
                                         src=""
-                                        class="mr-3 rounded-circle" width="50" alt="User" />Dijkstra</a>
+                                        class="mr-3 rounded-circle" width="50" alt="User" />{{username}}</a>
                                     </div>
                                     <div class="text-muted infoIcons">
                                         <span class="d-sm-inline-block"><i class="far fa-eye"></i> 219</span>
@@ -70,33 +70,22 @@
                                     
                                 </div>
 
-                                <div class="post-actions"> 
-                                    {{#if isUpvoted}}
-                                    <div class="upvote active" id="upvoteBtnPost">
-                                    {{else}}
-                                    <div class="upvote" id="upvoteBtnPost">
-                                    {{/if}}
-                                        <i class="fa fa-thumbs-up solid"></i>
-                                        <span>{{upvote}}</span>
-                                        <param  id="upvote_value" value='{{upvote}}'>
-                                        <param  id="upvote_bool" value='{{isUpvoted}}'>
-                                    </div>
-                                    
-                                    {{#if isDownvoted}}
-                                    <div class="downvote active" id="downvoteBtnPost">
-                                    {{else}}
-                                    <div class="downvote" id="downvoteBtnPost">
-                                    {{/if}}
-                                        <i class="fa fa-thumbs-down solid"></i>
-                                        <span>{{downvote}}</span> 
-                                        <param  id="downvote_value" value='{{downvote}}'> 
-                                        <param  id="downvote_bool" value='{{isDownvoted}}'>
-                                    </div>
+                                <div class="post-actions {{#if isLoggedIn}} enable {{else}} disable{{/if}} data-id="{{_id}}""> 
+                                    <i class="fas fa-thumbs-up post {{#findElement upvote session.user.id}}active{{/findElement}}" data-id="{{_id}}"></i>
+                                    <span class="vote-count">{{totalVote}}</span>
+                                    <i class="fas fa-thumbs-down post {{#findElement downvote session.user.id}}active{{/findElement}}" data-id="{{_id}}"></i>
                                    
+                                   {{#if isLoggedIn}}
                                     <button class="commentBtn btn btn-primary-outline" data-toggle="modal"
                                     data-target="#addPost">Comment... <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-text-fill" viewBox="0 0 16 16">
                                         <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.5a1 1 0 0 0-.8.4l-1.9 2.533a1 1 0 0 1-1.6 0L5.3 12.4a1 1 0 0 0-.8-.4H2a2 2 0 0 1-2-2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
                                       </svg></button>
+                                    {{else}}
+                                    <button class="commentBtn btn btn-primary-outline" data-toggle="modal"
+                                    data-target="#LogInFirst">Comment... <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-text-fill" viewBox="0 0 16 16">
+                                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.5a1 1 0 0 0-.8.4l-1.9 2.533a1 1 0 0 1-1.6 0L5.3 12.4a1 1 0 0 0-.8-.4H2a2 2 0 0 1-2-2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                                      </svg></button>
+                                    {{/if}}
 
                                 </div>
 
@@ -111,7 +100,7 @@
                             <div class="card-body p-2 p-sm-3">
                                 {{#if PostComments}}
                                     {{#each PostComments}}
-                                    {{> comments this}}
+                                    {{> comments this parent=..}}
                                     {{/each}}
                                 {{else}}
                                 <p>Not comments yet...</p>
@@ -324,6 +313,12 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="LogInFirst" tabindex="-1" role="dialog">
+                {{>modal}}
+            </div>
+
+
         </div>
     </div>
     {{>loadJsIndex}}

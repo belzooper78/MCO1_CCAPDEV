@@ -1,5 +1,9 @@
 import { SchemaTypes, Schema, model } from 'mongoose';
 const user_postSchema = new Schema({
+    username:{
+        type: SchemaTypes.String,
+        required: true
+    },
     title: {
         type: SchemaTypes.String,
         required: true
@@ -8,11 +12,7 @@ const user_postSchema = new Schema({
         type: SchemaTypes.String,
         required: true
     },
-    upvote:{
-        type: SchemaTypes.Number,
-        required: true
-    },
-    downvote:{
+    totalVote:{
         type: SchemaTypes.Number,
         required: true
     },
@@ -20,22 +20,13 @@ const user_postSchema = new Schema({
         type: SchemaTypes.Boolean,
         required: true
     },
-    isUpvoted:{
-        type: SchemaTypes.Boolean,
-        required: true
+    upvote:{
+        type: SchemaTypes.Array,
+        default: []
     },
-    isDownvoted:{
-        type: SchemaTypes.Boolean,
-        required: true
-    },
-    createdBy: {
-        type: SchemaTypes.ObjectId,
-        ref:'user_Account',
-        required: true
-    },
-    createdOn: {
-        type: SchemaTypes.String,
-        required: true
+    downvote:{
+        type: SchemaTypes.Array,
+        default: []
     }
     //dateTime, views, number of comments to be added in Phase 3
 });

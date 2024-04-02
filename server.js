@@ -10,7 +10,6 @@ import { fileURLToPath } from 'url';
 import { connectToMongo} from "./src/db/conn.js";
 import exphbs from 'express-handlebars';
 import user_posts from './src/db/user_post.js';
-import user_Account from './src/db/user.js';
 
 async function main(){
     const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -22,6 +21,12 @@ async function main(){
         saveUninitialized: true,
         cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
     }));
+
+    //Sagor, 2019: https://stackoverflow.com/questions/44883228/how-to-get-the-express-session-variable-in-all-the-handlebars-pages-right-now-i
+    app.use(function (req, res, next) {
+        res.locals.session = req.session;
+        next();
+    });
 
     app.use("/static", express.static(path.resolve(__dirname, './public')));  
 
@@ -35,6 +40,14 @@ async function main(){
             },
             trim: (input, end) => {
                 return input.substring(0,end);
+            },
+
+            //https://handlebarsjs.com/guide/block-helpers.html#the-with-helper
+            findElement: (array, element, options) => {
+                if(array.includes(element))
+                    return options.fn(this);
+                else 
+                    return options.inverse(this);
             }
         }}));
     app.set("view engine", "hbs");
@@ -47,44 +60,13 @@ async function main(){
     app.get('/home', async (req, res) => {
         console.log(req.session.user);
         const isLoggedIn = req.session.user !== undefined;
-
-        const userId = req.session.user;
-        console.log("user Id: "+JSON.stringify(userId));
-        const stringed = JSON.stringify(userId);
-        const userIdobject = userId !== undefined ? JSON.parse(stringed): console.log("userId is undefined");
-        const newUserId = userId !== undefined ? userIdobject.id: console.log("^^^");
-
-        const currentUserOG = await user_Account.findById(newUserId);
-        //console.log("username: "+currentUser.username);
-
-        
-        try{
-            let currentUser = {};
-            if(currentUserOG) {
-                currentUser={
-                    username: currentUserOG.username,
-                    imageP: currentUserOG.imageP,
-                    imageB: currentUserOG.imageB
-                }
-                console.log(currentUser.username);
-            }
-        
-            const user_postsArray = await user_posts.find({}).lean().exec();
-            //console.log("CHECKING CURRENT USER: "+ JSON.stringify(currentUser));
-            
-            res.render("index", {
-                layout: false,
-                title: "UserPosts",
-                userPosts: user_postsArray,
-                isLoggedIn: isLoggedIn,
-                //currentUser : currentUser,
-                //currentDATE: currentDATE
-            });
-        }catch{
-
-        }
-
-       
+        const user_postsArray = await user_posts.find({}).lean().exec();
+        res.render("index", {
+            layout: false,
+            title: "UserPosts",
+            userPosts: user_postsArray,
+            isLoggedIn: isLoggedIn
+        });
     });
 
     app.use(express.json());

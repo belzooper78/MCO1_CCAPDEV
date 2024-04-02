@@ -6,7 +6,7 @@ import {Session} from 'express-session'
 
 const userRouter = Router();
 
-userRouter.post('/login', async (req, res) => {
+userRouter.post('/*login', async (req, res) => {
     try {
         console.log(req.body);
         const user = await user_Account.findOne({ username: req.body.username });
@@ -21,7 +21,7 @@ userRouter.post('/login', async (req, res) => {
         }
 
         if(user && passIsValid){
-        req.session.user = {id: user._id.toString()};
+        req.session.user = {id: user._id.toString(), username: user.username};
         res.sendStatus(200);
             }
         }
@@ -33,7 +33,7 @@ userRouter.post('/login', async (req, res) => {
     }
 });
 
-userRouter.post('/signup', async (req, res) => {
+userRouter.post('/*signup', async (req, res) => {
     console.log(req.body.password);
     const hashedPass = await bcrypt.hash(req.body.password, 10);
     try {
@@ -50,12 +50,13 @@ userRouter.post('/signup', async (req, res) => {
     }
 });
 
-userRouter.get('/logout', (req, res) => {
+userRouter.get('/*logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500);
         }
         res.status(200);
+        res.redirect("/home");
     });
 });
 

@@ -5,17 +5,17 @@
             <div class="threadHeader">
                 <div class="thread-info">
                 <a href=""><img
-                    src="{{this.createdBy.imageP}}"
-                    class="mr-3 rounded-circle" width="50" alt="{{ this.createdBy.username}}" />{{this.createdBy.username}}</a>
+                    src=""
+                    class="mr-3 rounded-circle" width="50" alt="User" />{{this.username}}</a>
                 </div>
                 <div class="text-muted infoIcons">
-                    <!--<span class="d-sm-inline-block"><i class="far fa-eye"></i> 219</span>-->
+                    <span class="d-sm-inline-block"><i class="far fa-eye"></i> 219</span>
                     <span><i class="far fa-comment"></i> 1</span>
                 </div>
             </div>
             <param  id="post_value" value='{{this._id}}'>
             <div class="start-edit-container">
-                <div class="post-date">started on <span class="font-weight-bold">{{this.createdOn}}</span></div>
+                <div class="post-date">started on <span class="font-weight-bold"> 14/02/2024</span></div>
                 {{#if this.isEdited}}
                 <div class="comment-time"> edited <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                     <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
@@ -32,30 +32,12 @@
             </div>
         </div>
 
-        <div class="post-actions"> 
-            {{#if this.isUpvoted}}
-            <div class="upvote active" id="upvoteBtnPost">
-            {{else}}
-            <div class="upvote" id="upvoteBtnPost">
-            {{/if}}
-                <i class="fa fa-thumbs-up solid"></i>
-                <span>{{this.upvote}}</span>
-                <param  id="upvote_value" value='{{this.upvote}}'>
-                <param  id="upvote_bool" value='{{this.isUpvoted}}'>
-            </div>
-            
-            {{#if this.isDownvoted}}
-            <div class="downvote active" id="downvoteBtnPost">
-            {{else}}
-            <div class="downvote" id="downvoteBtnPost">
-            {{/if}}
-                <i class="fa fa-thumbs-down solid"></i>
-                <span>{{this.downvote}}</span> 
-                <param  id="downvote_value" value='{{this.downvote}}'> 
-                <param  id="downvote_bool" value='{{this.isDownvoted}}'>
-            </div>
+        <div class="post-actions {{#if parent.isLoggedIn}} enable {{else}} disable{{/if}} data-id="{{this._id}}""> 
+            <i class="fas fa-thumbs-up post {{#findElement this.upvote parent.session.user.id}}active{{/findElement}}" data-id="{{this._id}}"></i>
+            <span class="vote-count">{{this.totalVote}}</span>
+            <i class="fas fa-thumbs-down post {{#findElement this.downvote parent.session.user.id}}active{{/findElement}}" data-id="{{this._id}}"></i>
             <!--onclick="sendID('{{this._id}}')"-->
-            <a  href='/postComment/{{this._id}}'>
+            <a  href='/posts/{{this._id}}/comments'>
             <button class="commentBtn btn btn-primary-outline">Comment/View Comments... <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-text-fill" viewBox="0 0 16 16">
                 <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.5a1 1 0 0 0-.8.4l-1.9 2.533a1 1 0 0 1-1.6 0L5.3 12.4a1 1 0 0 0-.8-.4H2a2 2 0 0 1-2-2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
                 </svg></button></a>

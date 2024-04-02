@@ -1,5 +1,9 @@
 import { SchemaTypes, Schema, model } from 'mongoose';
 const user_commentSchema = new Schema({
+    username:{
+        type: SchemaTypes.String,
+        required: true
+    },
     post: {
         type: SchemaTypes.ObjectId,
         required: true
@@ -8,11 +12,7 @@ const user_commentSchema = new Schema({
         type: SchemaTypes.String,
         required: true
     },
-    upvote:{
-        type: SchemaTypes.Number,
-        required: true
-    },
-    downvote:{
+    totalVote:{
         type: SchemaTypes.Number,
         required: true
     },
@@ -20,13 +20,13 @@ const user_commentSchema = new Schema({
         type: SchemaTypes.Boolean,
         required: true
     },
-    isUpvoted:{
-        type: SchemaTypes.Boolean,
-        required: true
+    upvote:{
+        type: SchemaTypes.Array,
+        default: []
     },
-    isDownvoted:{
-        type: SchemaTypes.Boolean,
-        required: true
+    downvote:{
+        type: SchemaTypes.Array,
+        default: []
     }
 });
 const user_posts = model('user_comment', user_commentSchema);

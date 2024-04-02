@@ -1,7 +1,5 @@
 import { Router } from 'express';
-import { Types } from 'mongoose';
 import user_posts from '../db/user_post.js';
-import user_Account from '../db/user.js';
 
 const userPostRouter = Router();
 
@@ -20,22 +18,15 @@ userPostRouter.post("/userPosts", async (req, res) => {
     console.log("POST request received for /home");
     // console.log(req.body)
     try {
-        //const newUser_Post = new user_posts(req.body);
-        const user = req.session.user;
-        const userId= new Types.ObjectId(user);
-        const datenow = new Date();
-        const currentDATE = datenow.getDate()+"/"+datenow.getMonth()+"/"+datenow.getFullYear();
-       
-      
         const newUser_Post = new user_posts({
-            ...req.body,
-            createdBy: userId,
-            createdOn: currentDATE});
+            username: req.session.user.username,
+            title: req.body.title,
+            content: req.body.content,
+            totalVote: 0,
+            isEdited: false,
+        });
         await newUser_Post.validate();
-        await newUser_Post.populate('createdBy');
         await newUser_Post.save();
-        //console.log(JSON.stringify(createdBy.username)+": TESTING");
-
         
         // console.log(newUser_Post);
         res.sendStatus(200);
@@ -45,6 +36,74 @@ userPostRouter.post("/userPosts", async (req, res) => {
         res.sendStatus(500);
     }
 });
+
+userPostRouter.put('/posts/:id/upvote', async (req, res) => {
+    const postId = req.params.id;
+    const userId = req.session.user.id;
+  
+    try {
+      const post = await user_posts.findById(postId);
+  
+      if (!post) {
+        return res.status(404).send('Post not found');
+      }
+  
+      if (post.upvote.includes(userId)) {
+        post.totalVote -= 1;
+        post.upvote.pull(userId);
+      } else if (!post.upvote.includes(userId)) {
+        post.totalVote += 1;
+        post.upvote.push(userId);
+      }
+  
+      if (post.downvote.includes(userId)) {
+        post.totalVote += 1;
+        post.downvote.pull(userId);
+      }
+  
+      
+      await post.save();
+  
+      res.json({ totalVote: post.totalVote });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error upvoting post');
+    }
+  });
+  
+  userPostRouter.put('/posts/:id/downvote', async (req, res) => {
+    const postId = req.params.id;
+    const userId = req.session.user.id;
+  
+    try {
+      const post = await user_posts.findById(postId);
+  
+      if (!post) {
+        return res.status(404).send('Post not found');
+      }
+  
+      if (post.downvote.includes(userId)) {
+        post.totalVote += 1;
+        post.downvote.pull(userId);
+      } else if (!post.downvote.includes(userId)){
+        post.totalVote -= 1;
+        post.downvote.push(userId);
+      }
+  
+      if (post.upvote.includes(userId)) {
+        post.totalVote -= 1;
+        post.upvote.pull(userId);
+      }
+  
+      
+      await post.save();
+  
+      res.json({ totalVote: post.totalVote, upvote: post.upvote, downvote: post.downvote });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error downvoting post');
+    }
+  });
 
 
 export default userPostRouter;
