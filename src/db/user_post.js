@@ -32,6 +32,10 @@ const user_postSchema = new Schema({
         type: SchemaTypes.ObjectId,
         ref:'user_Account',
         required: true
+    },
+    createdOn: {
+        type: SchemaTypes.String,
+        required: true
     }
     //dateTime, views, number of comments to be added in Phase 3
 });
