@@ -66,16 +66,19 @@ async function main(){
                     imageP: currentUserOG.imageP,
                     imageB: currentUserOG.imageB
                 }
+                console.log(currentUser.username);
             }
+        
             const user_postsArray = await user_posts.find({}).lean().exec();
             //console.log("CHECKING CURRENT USER: "+ JSON.stringify(currentUser));
-
+            
             res.render("index", {
                 layout: false,
                 title: "UserPosts",
                 userPosts: user_postsArray,
                 isLoggedIn: isLoggedIn,
-                currentUser : currentUser
+                //currentUser : currentUser,
+                //currentDATE: currentDATE
             });
         }catch{
 
