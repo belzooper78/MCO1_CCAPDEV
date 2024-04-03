@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/login.css">
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-6 mx-auto p-0">
+            <div class="card">
+                <div class="login-box">
+                    <div class="login-snip">
+                        <div class="login-space">
+                            <form method="POST" action="/signup" id="signupForm">
+                                <div class="login">
+                                    <div class="group">
+                                        <label for="username" class="label">Username</label>
+                                        <input id="username" name="username" type="text" class="input" placeholder="Enter your username"
+                                            required >
+                                    </div>
+                                    <div class="group">
+                                        <label for="password" class="label">Password</label>
+                                        <input id="password" type="password" name="password" class="input" data-type="password"
+                                            placeholder="Enter your password" required>
+                                    </div>
+                                    {{#if error}}
+                                    <span>Username Taken!</span>
+                                    {{else}}
+                                    <br>
+                                    {{/if}}
+                                    
+                                    <div class="group">
+                                        <input type="submit" class="button" value="Sign Up" id="signupFormBtn">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                         <div class="hr"></div>
+                            <div class="foot">
+                                <a href="/login">Already Registered?</a>
+                                <a href="/home">Home</a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/static/js/signup.js"></script>
+</html>
