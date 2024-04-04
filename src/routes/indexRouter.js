@@ -6,6 +6,7 @@ import user_comments from '../db/user_comments.js';
 import user_posts from '../db/user_post.js';
 import mongoose from 'mongoose';
 
+
 const router = Router();
 console.log("index");
 

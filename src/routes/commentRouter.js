@@ -39,7 +39,7 @@ userCommentRouter.post("/comments", async (req, res) => {
 
 
 userCommentRouter.get('/posts/:id/comments', async (req, res) => {
-    const user_post = await user_posts.findById(req.params.id).lean().exec();
+    const user_post = await user_posts.findById(req.params.id).populate('createdBy').lean().exec();
     const user_commentsArray = await user_comments.find({post: req.params.id}).lean().exec();
     const isLoggedIn = req.session.user !== undefined;
     // console.log(user_commentsArray);

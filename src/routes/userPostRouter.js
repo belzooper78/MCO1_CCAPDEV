@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Types } from 'mongoose';
 import user_posts from '../db/user_post.js';
 
 const userPostRouter = Router();
@@ -6,7 +7,7 @@ const userPostRouter = Router();
 
 userPostRouter.get(("/userPosts" || "/home"), async (req, res) => {
     console.log("GET");
-    const user_postsArray = await user_posts.find({}).lean().exec();
+    const user_postsArray = await user_posts.find({}).populate('createdBy').lean().exec();
     res.render("index", {
         title: "UserPosts",
         userPosts: user_postsArray
@@ -18,12 +19,18 @@ userPostRouter.post("/userPosts", async (req, res) => {
     console.log("POST request received for /home");
     // console.log(req.body)
     try {
+      const user = req.session.user;
+      const userId= new Types.ObjectId(user);
+      const datenow = new Date();
+      const currentDATE = datenow.getDate()+"/"+datenow.getMonth()+"/"+datenow.getFullYear();
+
         const newUser_Post = new user_posts({
-            username: req.session.user.username,
             title: req.body.title,
             content: req.body.content,
             totalVote: 0,
             isEdited: false,
+            createdBy: userId,
+            createdOn: currentDATE
         });
         await newUser_Post.validate();
         await newUser_Post.save();
