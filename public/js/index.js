@@ -67,10 +67,26 @@ document.addEventListener("DOMContentLoaded", function() {
           });
 
           item.classList.add("active");
+          
 
+          const tab= this.getAttribute("data-tab");
+         
+          loadUserPosts(tab);
           updateUnderlinePosition();
       });
   });
+  const username =  document.getElementById("usernameData").getAttribute("data-username");
+  function loadUserPosts(tab) {
+    fetch(`/profiles/${username}/${tab}`)
+      .then(response => {
+        if(!response.ok){
+          throw new Error(`error :${response.status}`);
+        }
+      })
+  }
+  const activeTab = tabList.querySelector(".active");
+  const tabab = activeTab.getAttribute("data-tab");
+  loadUserPosts(tabab);
 
   function updateUnderlinePosition() {
       var activeItem = document.querySelector(".user-activitues li.active");
@@ -81,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function() {
           underline.style.transform = "translateX(" + leftOffset + "px)";
       }
   }
+
+
 });
 
 document.getElementsByClassName('edit-profile').addEventListener('click', function () {

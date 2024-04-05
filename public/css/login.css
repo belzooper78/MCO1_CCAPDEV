@@ -30,6 +30,7 @@ body {
     background: white;
 }
 
+/*ONLY PART CHANGED- transform n backface visibility*/
 .login-snip .login,
 .login-snip .sign-up-form {
     top: 0;
@@ -37,8 +38,8 @@ body {
     right: 0;
     bottom: 0;
     position: absolute;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
+    /*transform: rotateY(180deg);*/
+    /*backface-visibility: hidden;*/
 }
 
 .login-snip .sign-in,
@@ -64,7 +65,7 @@ body {
 
 .login-snip .sign-in:checked+.tab,
 .login-snip .sign-up:checked+.tab {
-    color: #76A2E3;
+    color: #3fa143;
     /* border-color: #1161ee; */
 }
 
@@ -107,12 +108,12 @@ body {
 }
 
 .login-space .group .label {
-    color: #6a6f8c;
+    color: #2b692f;
     font-size: 12px;
 }
 
 .login-space .group .button {
-    background: #76A2E3;
+    background: #62c27d;
 }
 
 .login-space .group label .icon {
@@ -154,7 +155,7 @@ body {
 } */
 
 .login-space .group .check:checked+label .icon {
-    background: #1161ee;
+    background: #2e573c;
 }
 
 .login-space .group .check:checked+label .icon:before {

@@ -282,9 +282,14 @@
   box-shadow: 0px 2px 2px #bababa;
 }
 
+.vote-count{
+    height: 2.5rem;
+    line-height: 40px;
+  text-align: center;
+  vertical-align: top;
+}
 
-
-.upvote, .downvote{
+.fa-thumbs-up, .fa-thumbs-down{
   float: left;
   height: 2.5rem;
   width: 2.5rem;
@@ -293,13 +298,13 @@
   vertical-align: top;
 }
 
-.upvote:hover, .upvote.active{
+.fa-thumbs-up:hover, .fa-thumbs-up.active{
     color: rgb(0, 255, 0);
     background-color: #eef9ff;
     border-radius: 50%;
 }
 
-.downvote:hover, .downvote.active{
+.fa-thumbs-down:hover, .fa-thumbs-down.active{
     color: red;
     background-color: #eef9ff;
     border-radius: 50%;
@@ -536,5 +541,9 @@ body{
     background-color: #48ce61;
     transition: width 0.3s ease, transform 0.3s ease;
 }
-
+.custom-size-modal .modal-body{
+    max-width: 800px; 
+    height: 500px;
+    margin: 1.75rem auto;
+}
 
