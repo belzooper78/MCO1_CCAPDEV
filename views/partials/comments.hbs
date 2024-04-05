@@ -2,43 +2,33 @@
     <div class="comment-info">
         <param  id="comment_value" value='{{this._id}}'>
         <a href="#"><img src=""
-        class="mr-3 rounded-circle" width="50" alt="User" /> UsernameHere</a>
+        class="mr-3 rounded-circle" width="50" alt="User" />{{this.username}}</a>
        {{#if this.isEdited}}
         <div class="comment-time"> edited <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                             <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
-                                          </svg> <span class="text-secondary font-weight-bold">13 minutes ago</span></div>
+                                          </svg></div>
         {{/if}}
-        <div class="comment-time"> replied <span class="text-secondary font-weight-bold">13 minutes ago</span></div>
     </div>
     
-    <div class="commentBody">{{this.content}}</div>
+    
+    {{#if parent.isLoggedIn}}  
+        <div class="commentBody {{#compare parent.session.user.username this.username}}titleUnderline{{/compare}}" 
+        {{#compare parent.session.user.username this.username}}data-toggle="modal" data-target="#forum-content"{{/compare}}>{{this.content}}</div>
+    {{else}}
+    <div class="commentBody" >{{this.content}}</div>
+    {{/if}}
+    
     <div class="comment-actions">
-        <div class="comment-likes">
-        {{#if this.isUpvoted}}
-            <div class="upvote active" id="upvoteBtnCmnt">
-            {{else}}
-            <div class="upvote" id="upvoteBtnCmnt">
-            {{/if}}
-                <i class="fa fa-thumbs-up solid"></i>
-                <span>{{this.upvote}}</span>
-                <param  id="cupvote_value" value='{{this.upvote}}'>
-                <param  id="cupvote_bool" value='{{this.isUpvoted}}'>
-            </div>
-            
-            {{#if this.isDownvoted}}
-            <div class="downvote active" id="downvoteBtnCmnt">
-            {{else}}
-            <div class="downvote" id="downvoteBtnCmnt">
-            {{/if}}
-                <i class="fa fa-thumbs-down solid"></i>
-                <span>{{this.downvote}}</span> 
-                <param  id="cdownvote_value" value='{{this.downvote}}'> 
-                <param  id="cdownvote_bool" value='{{this.isDownvoted}}'>
-            </div>
+        <div class="comment-likes{{#if parent.isLoggedIn}} enable {{else}} disable{{/if}} data-id="{{this._id}}"">
+            <i class="fas fa-thumbs-up comment {{#findElement this.upvote parent.session.user.id}}active{{/findElement}}" data-id="{{this._id}}"></i>
+            <span class="vote-count">{{this.totalVote}}</span>
+            <i class="fas fa-thumbs-down comment {{#findElement this.downvote parent.session.user.id}}active{{/findElement}}" data-id="{{this._id}}"></i>
         </div>
-        <div class="post-date">posted on <span class="font-weight-bold"> 14/02/2024</span></div>
+        <div class="post-date">posted on <span class="font-weight-bold"> {{this.dateTime}}</span></div>
     </div>
-    <span class="commentReply" data-toggle="modal" data-target="#addPost"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
-        <path d="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
-        </svg> Reply</span>
+    <a class="viewMore"  href='/comments/{{this._id}}/replies'> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ladder" viewBox="0 0 16 16">
+        <path d="M4.5 1a.5.5 0 0 1 .5.5V2h6v-.5a.5.5 0 0 1 1 0v14a.5.5 0 0 1-1 0V15H5v.5a.5.5 0 0 1-1 0v-14a.5.5 0 0 1 .5-.5M5 14h6v-2H5zm0-3h6V9H5zm0-3h6V6H5zm0-3h6V3H5z"/>
+        </svg>View {{this.totalReplies}} replies</a>
+
 </div>
+

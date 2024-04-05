@@ -1,16 +1,13 @@
 
-<select class="custom-select w-auto">
-    <option selected value="1">Latest</option>
-    <option value="2">Popular</option>
-    <option value="3">Top</option>
-    <option value="4">Controversial</option>
-    <option value="5">No Replies</option>
+<select class="custom-select w-auto" id="postSorter">
+    <option {{#if isLatest}}selected{{/if}} value="1">Latest</option>
+    <option {{#if isPopular}}selected{{/if}} value="2">Popular</option>
 </select>
 <script>console.log('navbar')</script>
 <div class="input-group ">
-    <input type="text" class="form-control" placeholder="Search..." />
+    <input type="text" class="form-control searchBar" placeholder="Search Posts..." />
         <div class="input-group-append">
-            <button type="button" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <button type="button" class="btn btn-secondary searchConfirmBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                 </svg> Search</button>
             <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" 
@@ -25,7 +22,14 @@
             </div>
         </div>
 </div>
-<a href="login">
+{{#if isLoggedIn}}
+<a href="/logout">
+<button type="button" class="login-btn btn btn-light"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
+    <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+    </svg> Log-out</button></a>
+{{else}}
+<a href="/login">
 <button type="button" class="login-btn btn btn-light"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
     <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
     </svg> Log-in</button></a>
+{{/if}}

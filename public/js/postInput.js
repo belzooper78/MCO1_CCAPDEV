@@ -1,123 +1,15 @@
 const postBtn = document.getElementById("confirm_post");
 const post_form = document.forms.createPost_form;
 
-const post_upvoteBtn = document.getElementById("upvoteBtnPost");
-const post_downvoteBtn = document.getElementById("downvoteBtnPost");
-
-post_upvoteBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
-    console.log('upvoted');
-    let Obj1 = Object.assign({});
-    console.log(document.getElementById("upvote_bool").value);
-    if(document.getElementById("upvote_bool").value === "false"){
-        Object.assign(Obj1, {
-        post: document.getElementById("post_value").value,
-        upvote: document.getElementById("upvote_value").value + 1,
-        isUpvoted: true
-       });
-       console.log("1");
-
-    }
-    else if(document.getElementById("upvote_bool").value === "true"){
-        Object.assign(Obj1, { 
-            post: document.getElementById("post_value").value,
-            upvote: document.getElementById("upvote_value").value - 1,
-            isUpvoted: false
-        });
-        console.log("2");
-    }
-    if(document.getElementById("downvote_bool").value === "true"){
-        Object.assign(Obj1, { 
-            downvote: document.getElementById("downvote_value").value - 1,
-            isDownvoted: false
-        });
-        console.log("3");
-    }
-    
-    const jString = JSON.stringify(Obj1);
-    console.log(jString)
-    try {
-        const response = await fetch("/update", {
-            method: 'POST',
-            body: jString,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (response.status === 200) {
-            location.reload();
-        } else {
-            console.log("Status code received: " + response.status);
-        }
-    } catch (err) {
-        console.error(err);
-    }
-   
-    
-});
-
-post_downvoteBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
-    console.log('downvoted');
-    let Obj1 = Object.assign({});
-    if(document.getElementById("upvote_bool").value === "true"){
-        Object.assign(Obj1, {  
-            upvote: document.getElementById("upvote_value").value - 1,
-            isUpvoted: false
-        });
-    
-    }
-    if(document.getElementById("downvote_bool").value === "false"){
-        Object.assign(Obj1, { 
-            post: document.getElementById("post_value").value,
-            downvote: document.getElementById("downvote_value").value + 1,
-            isDownvoted: true
-        });
-        
-    }
-    else if(document.getElementById("downvote_bool").value === "true"){
-        Object.assign(Obj1, {  
-            post: document.getElementById("post_value").value,
-            downvote: document.getElementById("downvote_value").value - 1,
-            isDownvoted: false
-        });
-       
-    }
-    const jString = JSON.stringify(Obj1);
-    console.log(jString);
-    try {
-        const response = await fetch("/update", {
-            method: 'POST',
-            body: jString,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (response.status === 200) {
-            location.reload();
-        } else {
-            console.log("Status code received: " + response.status);
-        }
-    } catch (err) {
-        console.error(err);
-    }
-    
-});
-
 postBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     const form_data = new FormData(post_form);
-
+    sessionStorage.getItem('user');
     if(form_data.get("title") !== "" && form_data.get("content") !== ""){
     console.log('submit');
     const Obj = { 
         title: form_data.get("title"),
         content: form_data.get("content"),
-        upvote: 0,
-        downvote: 0,
-        isEdited: false,
-        isUpvoted: false,
-        isDownvoted: false
     };
     console.log(Obj);
     const jString = JSON.stringify(Obj);
@@ -142,8 +34,196 @@ postBtn?.addEventListener("click", async (e) => {
         console.error(err);
     }
 
-} else{
+  } else{
     console.log('submit failed: forms empty');
-}
+  }
 
 });
+
+const searchBtn = document.querySelector('.searchConfirmBtn');
+
+////https://datatracker.ietf.org/doc/html/rfc3986#section-3
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+searchBtn?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const input = document.querySelector('.searchBar').value;
+    
+    window.location.href = `/posts?search=${encodeURIComponent(input)}`;    
+    
+});
+
+
+const postSorter = document.getElementById('postSorter');
+
+postSorter?.addEventListener('change', async (e) => {
+    e.preventDefault();
+    const select = postSorter.value;
+    window.location.href = `/posts?sort=${select}`;    
+    
+    
+});
+
+
+
+const deletePostBtn = document.getElementById("confirmDeletePost");
+
+// applies for either posts or comments
+deletePostBtn?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    console.log("delete...")
+    const postId = document.getElementById("post_value").value;
+
+    //this checks if the render of postComment.hbs is for a post or comment/reply
+    forReply = document.getElementById("isItReply").value;
+
+
+      if(forReply == 'true'){
+        try {
+          const response = await fetch(`/comments/${postId}/delete`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+          
+          console.log(response);
+          if (response.status === 200) {
+              location.reload();
+          } else {
+              console.log("Status code received: " + response.status);
+          }
+      } catch (err) {
+          console.error(err);
+      }
+      window.location.reload();
+
+      }
+      else {
+        try {
+            const response = await fetch(`/posts/${postId}/delete`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            console.log(response);
+            if (response.status === 200) {
+                location.reload();
+            } else {
+                console.log("Status code received: " + response.status);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+        window.location.reload();
+     } 
+
+  
+
+});
+
+//this works for editing either posts or comments
+const editPostBtn = document.getElementById("confirmEditPost");
+const editPost_form = document.forms.editPostForm;
+
+editPostBtn?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const form_data = new FormData(editPost_form);
+    const postId = document.getElementById("post_value").value;
+
+    //this checks if the render of postComment.hbs is for a post or comment/reply
+    forReply = document.getElementById("isItReply").value;
+
+    if(form_data.get("editContent") !== ""){
+      console.log('submit');
+      const Obj = { 
+          content: form_data.get("editContent"),
+      };
+      console.log(Obj);
+      const jString = JSON.stringify(Obj);
+      console.log(jString);
+
+      if(forReply == 'true'){
+        try {
+          const response = await fetch(`/comments/${postId}/edit`, {
+              method: 'PUT',
+              body: jString,
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+          
+          console.log(response);
+          if (response.status === 200) {
+              location.reload();
+          } else {
+              console.log("Status code received: " + response.status);
+          }
+      } catch (err) {
+          console.error(err);
+      }
+      window.location.reload();
+
+      }
+      else {
+        try {
+            const response = await fetch(`/posts/${postId}/edit`, {
+                method: 'PUT',
+                body: jString,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            console.log(response);
+            if (response.status === 200) {
+                location.reload();
+            } else {
+                console.log("Status code received: " + response.status);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+        window.location.reload();
+     } 
+    }else{
+      console.log('submit failed: forms empty');
+  }
+  
+
+});
+
+//improved upon with Mistral.ai
+
+const upvoteIcons = document.querySelectorAll('.fa-thumbs-up.post');
+const downvoteIcons = document.querySelectorAll('.fa-thumbs-down.post');
+const post = document.querySelector('.post-actions');
+var postClassList = post.classList;
+
+if(postClassList.contains('enable')){
+upvoteIcons.forEach((icon) => {
+  icon.addEventListener('click', async (event) => {
+    const postId = event.target.closest('.fa-thumbs-up.post').dataset.id;
+    const response = await fetch(`/posts/${postId}/upvote`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    window.location.reload();
+  });
+});
+
+downvoteIcons.forEach((icon) => {
+  icon.addEventListener('click', async (event) => {
+    const postId = event.target.closest('.fa-thumbs-down.post').dataset.id;
+    const response = await fetch(`/posts/${postId}/downvote`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    window.location.reload();
+  });
+});
+}
+

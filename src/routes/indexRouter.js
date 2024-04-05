@@ -1,15 +1,40 @@
 import { Router } from 'express';
 import userPostRouter from './userPostRouter.js';
 import userCommentRouter from './commentRouter.js';
-import user_comments from '../db/user_comments.js';
+import userRouter from './userRouter.js';
+import tagRouter from './tagRouter.js';
 import user_posts from '../db/user_post.js';
-import mongoose from 'mongoose';
+import tags from '../db/tags.js';
 
 const router = Router();
 console.log("index");
 
-router.get("/", (req, res) => {
-    res.redirect("/home");
+router.get('/', (req, res) => {
+    res.redirect('/home');
+});
+
+
+router.get('/home', async (req, res) => {
+    console.log(req.session.user);
+    const isLoggedIn = req.session.user !== undefined;
+    var user_postsArray = null;
+    if(isLoggedIn){
+    user_postsArray = await user_posts.find({}).sort({dateTime : -1}).lean().exec();
+    } else {
+    user_postsArray = await user_posts.find({}).sort({dateTime : -1}).limit(15).lean().exec();
+    }
+    const frequentTopics = await tags.find({}).sort({totalUsed : -1}).limit(10).lean().exec();
+    const newTopics = await tags.find({}).sort({timeCreated : -1}).limit(10).lean().exec();
+
+    res.render("index", {
+        layout: false,
+        title: "UserPosts",
+        userPosts: user_postsArray,
+        isLoggedIn: isLoggedIn,
+        frequentTopics: frequentTopics,
+        newTopics: newTopics
+    });
+
 });
 
 router.get("/homepage", (req, res) => {
@@ -20,68 +45,78 @@ router.get("/login", (req, res) => {
     res.render("login");
 });
 
-router.get("/Tags",(req, res) => {
-    res.render("Tags");
+router.get("/signup", (req, res) => {
+    res.render("signup");
 });
 
-//both posts and comments uses this
-router.post("/update", async (req, res) => {
-    console.log("POST request received for /update");
-    console.log("reading...",req.body);
-    let obj = Object.assign({});
-    if("title" in req.body){
-        Object.assign(obj, {title: req.body.title});
-    }
-    if("content" in req.body){
-        Object.assign(obj, {content: req.body.content});
-    }
-    if("upvote" in req.body){
-        Object.assign(obj, {upvote: req.body.upvote});
-    }
-    if("downvote" in req.body){
-        Object.assign(obj, {downvote: req.body.downvote});
-    }
-    if("isEdited" in req.body){
-        Object.assign(obj, {isEdited: req.body.isEdited});
-    }
-    if("isUpvoted" in req.body){
-        Object.assign(obj, {isUpvoted: req.body.isUpvoted});
-    }
-    if("isDownvoted" in req.body){
-        Object.assign(obj, {isDownvoted: req.body.isDownvoted});
+//https://www.mongodb.com/docs/manual/reference/operator/query/or/
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+//https://expressjs.com/en/api.html
+router.get("/posts", async (req, res) => {
+    const isLoggedIn = req.session.user !== undefined;
+    var query_Str = ""
+    if (req.query.search == undefined)
+        query_Str = decodeURIComponent("");
+    else
+        query_Str = decodeURIComponent(req.query.search) || "";
+    const words_Array = query_Str.split(/\s+/);
+    const regex_Array = words_Array.map((word) => new RegExp('\\b' + word + '\\b', "i"));
+    const sortPost = req.query.sort || 1;
+    var sortOption = {dateTime : -1};
+    var isPopular = false;
+    var isLatest = true;
+    switch(sortPost){
+        case "1":
+            sortOption = {dateTime: -1};
+            isPopular = false;
+            isLatest = true;
+        break;
+        case "2":
+            sortOption = {totalVote: -1};
+            isPopular = true;
+            isLatest = false;
+        break;
+    }       
+
+    var user_postsArray = null;
+    if(isLoggedIn){
+    user_postsArray = await user_posts.find({
+        $or: [
+          { title: { $regex: regex_Array } },
+          { content: { $regex: regex_Array } },
+        ],
+      }).sort(sortOption).lean().exec();
+    } 
+    
+    else {
+    user_postsArray = await user_posts.find({
+        $or: [
+          { title: regex_Array },
+          { content: regex_Array },
+        ],
+      }).sort(sortOption).limit(15).lean().exec();
     }
 
-    if("post" in req.body){
-        try {
-            const update = await user_posts.findOneAndUpdate({_id: req.body.post}, obj);
-            await update.validate();
-            await update.save();
-            console.log("update");
-            console.log(update);
-            res.sendStatus(200);
-    
-        } catch (err) {
-            console.error(err);
-            res.sendStatus(500);
-        }
-    }
-    else if("comment" in req.body){
-        try {
-            const update = await user_comments.findOneAndUpdate({_id: req.body.comment}, obj);
-            await update.validate();
-            await update.save();
-            
-            console.log(update);
-            res.sendStatus(200);
-    
-        } catch (err) {
-            console.error(err);
-            res.sendStatus(500);
-        }
-    }
+
+
+    const frequentTopics = await tags.find({}).sort({totalUsed : -1}).limit(10).lean().exec();
+    const newTopics = await tags.find({}).sort({timeCreated : -1}).limit(10).lean().exec();
+
+    res.render("index", {
+        userPosts: user_postsArray,
+        isLoggedIn: isLoggedIn,
+        frequentTopics: frequentTopics,
+        newTopics: newTopics,
+        isPopular: isPopular,
+        isLatest: isLatest
+    });
 });
 
+router.use(tagRouter);
 router.use(userPostRouter);
 router.use(userCommentRouter);
+router.use(userRouter);
+
 
 export default router;
