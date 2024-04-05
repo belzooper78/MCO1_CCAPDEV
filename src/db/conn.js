@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const mongoURI = process.env.MONGODB_URI;
-const mongoURIs = "mongodb://localhost:27017";
+const mongoURIs = "mongodb+srv://raphaelvillaroman:villaroman@ccapdev-cluster.jpugkbw.mongodb.net/";
 
 export function connectToMongo(dbName = process.env.DB_NAME) {
     return mongoose.connect(mongoURI, {dbName: dbName});
