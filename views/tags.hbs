@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <head>
     <title> Forums </title>
     {{>loadCssIndex}}
@@ -15,9 +14,9 @@
                                 <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
                               </svg> Home </button></a>
                         <div class="input-group ">
-                            <input type="text" class="form-control searchBar" placeholder="Search Posts..." />
+                            <input type="text" class="form-control" placeholder="Search..." />
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-secondary searchConfirmBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <button type="button" class="btn btn-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                                       </svg> Search</button>
                                     <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" 
@@ -32,17 +31,10 @@
                                     </div>
                                 </div>
                         </div>
-                        {{#if isLoggedIn}}
-                        <a href="/logout">
+                        <a href="login">
                         <button type="button" class="login-btn btn btn-light"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
                             <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                            </svg> Log-out</button></a>
-                        {{else}}
-                        <a href="/login">
-                        <button type="button" class="login-btn btn btn-light"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
-                            <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-                            </svg> Log-in</button></a>
-                        {{/if}}
+                          </svg> Log-in</button></a>
                     </div>
 
 
@@ -68,11 +60,47 @@
                       </form>
                     
                     <div class="innerBody p-2 p-sm-3 collapse forum-content show">
-                        {{#if tags}}
-                            {{#each tags}}
-                            {{> tagContainer this parent=..}}
-                            {{/each}}
-                        {{/if}}
+                        <div class="tagContainer card col-sm-4">
+                            <div class="tagBadge badge badge-secondary">Laptops <div class="totalPost"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                              </svg> 100</div> </div>
+                            <div class="tagDescription">
+                                    A device
+                            </div>
+                        </div>
+                        <div class="tagContainer card col-sm-4">
+                            <div class="tagBadge badge badge-secondary">Arduino <div class="totalPost"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                              </svg> 100</div> </div>
+                            <div class="tagDescription">
+                                    A device
+                            </div>
+                        </div>
+                        <div class="tagContainer card col-sm-4">
+                            <div class="tagBadge badge badge-secondary">GPUs <div class="totalPost"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                              </svg> 100</div> </div>
+                            <div class="tagDescription">
+                                    A device
+                            </div>
+                        </div>
+                        <div class="tagContainer card col-sm-4">
+                            <div class="tagBadge badge badge-secondary">Monitors <div class="totalPost"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                              </svg> 100</div> </div>
+                            <div class="tagDescription">
+                                    A device
+                            </div>
+                        </div>
+                        <div class="tagContainer card col-sm-4">
+                            <div class="tagBadge badge badge-secondary">Smart Phones <div class="totalPost"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+                              </svg> 100</div> </div>
+                            <div class="tagDescription">
+                                    A device
+                            </div>
+                        </div>
+                        
                     </div>           
                     
                     <ul class="Navpagination pagination pagination-sm  justify-content-center">

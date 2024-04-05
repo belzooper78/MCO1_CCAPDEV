@@ -74,7 +74,7 @@ async function main(){
     try{
         await connectToMongo();
         console.log("Connected to MongoDB server");
-        app.listen(process.env.SERVER_PORT, () => {
+        app.listen(process.env.PORT || 3000, () => {
             console.log("Express app now listening...");
         });
     } catch(err){
