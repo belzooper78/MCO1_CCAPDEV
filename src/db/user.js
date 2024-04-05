@@ -10,6 +10,19 @@ const user_Schema = new Schema({
     password: {
         type: SchemaTypes.String,
         required: true
+    },
+    imageP: {//profile picture imageP 
+        type: String,
+        default: '/static/images/pfp.png'
+        
+    },
+    imageB: {//BACKGROUND IMAGE
+        type: String,
+        default: '/static/images/pfp.png'
+    },
+    desc: {
+        type: String,
+        default: 'none'
     }
 
 });

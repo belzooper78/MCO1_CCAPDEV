@@ -3,8 +3,61 @@ import user_Account from '../db/user.js';
 import bcrypt from 'bcrypt';
 // import jwt from 'jsonwebtoken';
 import {Session} from 'express-session'
+import multer from 'multer';
 
 const userRouter = Router();
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './public/images') //absolute path
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname)
+    }
+})
+const upload = multer({ storage: storage });
+//https://stackoverflow.com/questions/36096805/uploading-multiple-files-with-multer-but-from-different-fields
+userRouter.post('/update-profile', 
+upload.fields([{ 
+    name: 'profileImage', maxCount: 1 
+}, { 
+    name: 'bgImage', maxCount: 1 
+}]), async (req, res, next) => {
+    try{
+        const username = req.body.username;
+        const pfp = req.files['profileImage'] ? req.files['profileImage'][0] : null; //null things
+        const bgImage = req.files['bgImage'] ? req.files['bgImage'][0] : null;
+        const desc = req.body.description;
+        console.log("profile EDIT CHECK: "+username);
+
+        const user = await user_Account.findOne({ username: username });
+        if (!user) {
+            res.sendStatus(400);
+        } else{
+            console.log(pfp.path);
+            if (pfp) {
+                user.imageP = pfp.path;
+              }
+              if (bgImage) {
+                user.imageB = bgImage.path;
+              }
+            user.desc = desc;
+           
+            await user.validate();
+            await user.save();
+            
+            res.status(200);
+        }
+        
+    }catch (err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+
+   
+  });
+
 
 userRouter.post('/*login', async (req, res) => {
     try {

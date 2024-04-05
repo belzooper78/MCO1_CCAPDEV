@@ -7,7 +7,7 @@ const userPostRouter = Router();
 
 userPostRouter.get(("/userPosts" || "/home"), async (req, res) => {
     console.log("GET");
-    const user_postsArray = await user_posts.find({}).lean().exec();
+    const user_postsArray = await user_posts.find({}).populate('createdBy').lean().exec();
     res.render("index", {
         title: "UserPosts",
         userPosts: user_postsArray
@@ -26,6 +26,11 @@ userPostRouter.post("/userPosts", async (req, res) => {
     postTags = [...new Set(low_postTags)];
 
     try {
+      const user = req.session.user;
+      const userId= new Types.ObjectId(user);
+      const datenow = new Date();
+      const currentDATE = datenow.getDate()+"/"+datenow.getMonth()+"/"+datenow.getFullYear();
+
         const newUser_Post = new user_posts({
             username: req.session.user.username,
             title: req.body.title,
@@ -33,7 +38,9 @@ userPostRouter.post("/userPosts", async (req, res) => {
             totalVote: 0,
             totalComments: 0,
             isEdited: false,
-            tags: postTags
+            tags: postTags,
+            createdBy: userId,
+            createdOn: currentDATE
         });
         await newUser_Post.validate();
         await newUser_Post.save();

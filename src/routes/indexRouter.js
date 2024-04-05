@@ -4,6 +4,7 @@ import userCommentRouter from './commentRouter.js';
 import userRouter from './userRouter.js';
 import tagRouter from './tagRouter.js';
 import user_posts from '../db/user_post.js';
+import user_Account from '../db/user.js';
 import tags from '../db/tags.js';
 
 const router = Router();
@@ -19,23 +20,91 @@ router.get('/home', async (req, res) => {
     const isLoggedIn = req.session.user !== undefined;
     var user_postsArray = null;
     if(isLoggedIn){
-    user_postsArray = await user_posts.find({}).sort({dateTime : -1}).lean().exec();
+    user_postsArray = await user_posts.find({}).populate('createdBy').sort({dateTime : -1}).lean().exec();
     } else {
-    user_postsArray = await user_posts.find({}).sort({dateTime : -1}).limit(15).lean().exec();
+    user_postsArray = await user_posts.find({}).populate('createdBy').sort({dateTime : -1}).limit(15).lean().exec();
     }
     const frequentTopics = await tags.find({}).sort({totalUsed : -1}).limit(10).lean().exec();
     const newTopics = await tags.find({}).sort({timeCreated : -1}).limit(10).lean().exec();
 
+    const userId = req.session.user; //to get Id of current user
+    const stringed = JSON.stringify(userId);
+    const userIdobject = userId !== undefined ? JSON.parse(stringed): console.log("userId is undefined");
+    const newUserId = userId !== undefined ? userIdobject.id: console.log("^^^");
+    const currentUserOG = await user_Account.findById(newUserId);
+    try{
+        let currentUser = {};
+            if(currentUserOG) {
+                currentUser={
+                    username: currentUserOG.username,
+                    imageP: currentUserOG.imageP,
+                    imageB: currentUserOG.imageB
+                }
+                console.log(currentUser.username);
+            }
     res.render("index", {
         layout: false,
         title: "UserPosts",
         userPosts: user_postsArray,
         isLoggedIn: isLoggedIn,
         frequentTopics: frequentTopics,
-        newTopics: newTopics
+        newTopics: newTopics,
+        currentUser: currentUser
     });
+    }catch{
 
+    }
 });
+router.get(('/profiles/:username'), async (req, res) => {
+    console.log(req.session.user);
+    const isLoggedIn = req.session.user !== undefined;
+
+    const userId = req.session.user; //to get Id of current user
+    const stringed = JSON.stringify(userId);
+    const userIdobject = userId !== undefined ? JSON.parse(stringed): console.log("userId is undefined");
+    const newUserId = userId !== undefined ? userIdobject.id: console.log("^^^");
+    const currentUserOG = await user_Account.findById(newUserId);
+
+
+    try{
+        let currentUser = {};
+            if(currentUserOG) {
+                currentUser={
+                    username: currentUserOG.username,
+                    imageP: currentUserOG.imageP,
+                    imageB: currentUserOG.imageB
+                }
+                console.log(currentUser.username);
+            }
+        const viewedUser = req.params.username;
+        const user_postsArray = await user_posts.find({}).populate('createdBy').lean().exec();
+        const user = await user_Account.findOne({username: viewedUser});
+
+        //to avoid andlebars: Access has been denied to resolve the property "username" because it is not an "own property" of its parent... :skull:
+        let vuser = {};
+            if(user){
+                vuser ={
+                    username: user.username,
+                    imageP: user.imageP,
+                    imageB: user.imageB,
+                    desc: user.desc
+                }
+            }
+        const samePerson =  currentUser.username === vuser.username;
+        res.render("profiles", {
+            layout: false,
+            title: "UserProfile",
+            userPosts: user_postsArray,
+            isLoggedIn: isLoggedIn,
+            currentUser: currentUser,
+            viewedUser: vuser,
+            samePerson: samePerson
+        });
+    }catch{
+
+    }
+});
+
 
 router.get("/homepage", (req, res) => {
     res.redirect("/home");

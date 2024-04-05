@@ -9,7 +9,6 @@ import { fileURLToPath } from 'url';
 import { connectToMongo} from "./src/db/conn.js";
 import exphbs from 'express-handlebars';
 
-
 async function main(){
     const __dirname = dirname(fileURLToPath(import.meta.url));
     const app = express();
