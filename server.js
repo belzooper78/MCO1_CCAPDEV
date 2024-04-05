@@ -14,7 +14,7 @@ async function main(){
     const app = express();
 
     app.use(session({
-        secret: process.env.SESSION_SECRET,
+        secret: "yourRandomLongComplexString",
         resave: false,
         saveUninitialized: false,
         cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000}
